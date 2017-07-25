@@ -16,7 +16,7 @@
 \usepackage{graphicx}
 
 \title{\huge \bf
-CoSTAR in Surgery: A Cross-platform User Interface \\for Collaborative Robot Task Specification
+CoSTAR in Surgery: A Cross-platform User Interface \\for Surgical Robot Task Specification
 }
 %
 \author{Baichuan Jiang$^{1}$ and Chris Paxton$^{2}$
@@ -48,7 +48,7 @@ Human-Robot Collaboration (HRC) in surgery have been an emerging field of study 
 
 Surgical robots have been increasingly adopted in clinical procedures to support surgeons with various tasks, while most systems currently available are under full control of the surgeon. It is suggested in recent studies \cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi} that incorporating further intelligence into the surgical robot will free surgeons from repetitive tasks, reduce large movements of master manipulator to avoid clutching and readjusting hand position, and achieve better overall precision and accuracy. 
 
-For many of the proposed collaborative schemes, the central idea is to take advantage of the reliability in robots to perform less critical tasks while also allowing surgeons in the loop to perform fine actions with their domain knowledge. Hubot system in \cite{berthet2016hubot} runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, fully automated. Padoy et al. \cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure. To automatically alternate between manual and automated subtasks, observations of surgeon’s movement is served as a trigger for next automated subtask. Collaboration system for HALS procedure \cite{bauzano2016collaborative} where surgeon inserts a hand into abdomen while operating the laparoscopic instrument using the other hand also utilizes a workflow manager to allow the robot being informed of the current state of intervention. Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. 
+For many of the proposed collaborative schemes, the central idea is to take advantage of the reliability in robots to perform less critical tasks while also allowing surgeons in the loop to perform fine actions with their domain knowledge. Hubot system in \cite{berthet2016hubot} runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, fully automated. Padoy et al. \cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure. To automatically alternate between manual and automated subtasks, observations of surgeon’s movement is served as a trigger for next automated subtask. Collaboration system for HALS procedure \cite{bauzano2016collaborative} where surgeon inserts a hand into abdomen while operating the laparoscopic instrument using the other hand also utilizes a workflow manager to allow the robot being informed of the current state of intervention. Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. Surgeons/researchers can easily construct such  behavior trees to automate the procedure adapting to their specific scenarios. 
 
 This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. Therefore, while UR5 and KUKA LBR iiwa are also major platforms for collaborative surgical robot research, the focus of this work is on the new implementation on dVRK with syste setup shown in Fig.1. 
 
@@ -61,11 +61,39 @@ This work is a surgical generalization of our previous work in \cite{paxton2017c
 \end{figure}
 
 
-\section{Methodology}
+\section{System Architecture}
+To enable cross-platform implementation, a modular framework is designed. Taking the component \texttt{ARM} as an example, the inheritance within each component is the key part of the modularity. The abstract component \texttt{ARM} provides a list of functionalities, while all undefined but required functionalities such as \texttt{TEACH} and \texttt{MOVE} must be implemented by a particular instantiation of \texttt{ARM}, resulting in components \texttt{UR}, \texttt{IIWA}, and \texttt{PSM}. 
+
+Each component $C$ can be viewed as a set $(I,O,p,s,u)$ that associates with input data $I$, output data $O$, set of predicates $p$, set of symbols $s$ and set of operations $u$. Input and output are represented by ROS topics. Symbols represent object and positions, such as xxx, and predicates describe the qualities of these objects and positions, which can be used as start/stop conditions to control task workflow. More details of the component definition can be found in \cite{paxton2017costar}.
+
+Basic components for CoSTAR system task execution such as \texttt{Perception},\texttt{Gripper},\texttt{Arm} and\texttt{Predicator} are united by behavior-tree based component \texttt{Instructor}. Symbols and predicates produced by components such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} are aggregated by \texttt{Predicator} which controls the task workflow of the behavior tree. 
+
+Behavior tree is expressive to represent a great variety of tasks accommodating different scenarios for human-robot collaborative surgery. This is achieved through the linking of internal nodes:
+ 
+\begin{itemize}
+\item \texttt{SEQUENCE} node: tick each one at a time in order, until one reports \texttt{SUCCESS}. One child's fail will result in sequence's fail.
+\item \texttt{SELECTION} node: tick each child in order until one returns success.
+\item \texttt{REPEAT N} node: tick children until N successes or failures are reported.
+\item \texttt{RESET N} node: returns the value of child, but resets the child up to N times.
+\end{itemize} 
+
+Combining the above structural nodes and operation nodes (usually leaf node), a customized behavior tree can be created. The process of creation can be greatly simplified using the \texttt{INSTRUCTOR} user interface as shown in Fig. \ref{fig:instructor}.
+
+\begin{figure}[bt]
+\centering
+\includegraphics[width=200pt]{instructor.png}
+\caption{Instructor user interface (a placeholder).}
+\label{fig:instructor}
+\end{figure}
 
 
 
-\section{Conclusions}
+
+\section{Case Study}
+
+
+
+\section{Discussion and Conclusion}
 
 \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
@@ -83,9 +111,9 @@ This work is a surgical generalization of our previous work in \cite{paxton2017c
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{APPENDIX}
-
-\section*{ACKNOWLEDGMENT}
+%\section*{APPENDIX}
+%
+%\section*{ACKNOWLEDGMENT}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
