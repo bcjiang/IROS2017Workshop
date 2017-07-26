@@ -50,7 +50,7 @@ Surgical robots have been increasingly adopted in clinical procedures to support
 
 For many of the proposed collaborative schemes, the central idea is to take advantage of the reliability in robots to perform less critical tasks while also allowing surgeons in the loop to perform fine actions with their domain knowledge. Hubot system in \cite{berthet2016hubot} runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, fully automated. Padoy et al. \cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure. To automatically alternate between manual and automated subtasks, observations of surgeon’s movement is served as a trigger for next automated subtask. Collaboration system for HALS procedure \cite{bauzano2016collaborative} where surgeon inserts a hand into abdomen while operating the laparoscopic instrument using the other hand also utilizes a workflow manager to allow the robot being informed of the current state of intervention. Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. Surgeons/researchers can easily construct such  behavior trees to automate the procedure adapting to their specific scenarios. 
 
-This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. Therefore, while UR5 and KUKA LBR iiwa are also major platforms for collaborative surgical robot research, the focus of this work is on the new implementation on dVRK with syste setup shown in Fig.1. 
+This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. Therefore, while UR5 and KUKA LBR iiwa are also major platforms for collaborative surgical robot research, the focus of this work is on the new implementation on dVRK with syste setup shown in Fig. \ref{fig:dvrk}. 
 
 
 \begin{figure}[bt]
@@ -66,7 +66,7 @@ To enable cross-platform implementation, a modular framework is designed. Taking
 
 Each component $C$ can be viewed as a set $(I,O,p,s,u)$ that associates with input data $I$, output data $O$, set of predicates $p$, set of symbols $s$ and set of operations $u$. Input and output are represented by ROS topics. Symbols represent object and positions, such as xxx, and predicates describe the qualities of these objects and positions, which can be used as start/stop conditions to control task workflow. More details of the component definition can be found in \cite{paxton2017costar}.
 
-Basic components for CoSTAR system task execution such as \texttt{Perception},\texttt{Gripper},\texttt{Arm} and\texttt{Predicator} are united by behavior-tree based component \texttt{Instructor}. Symbols and predicates produced by components such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} are aggregated by \texttt{Predicator} which controls the task workflow of the behavior tree. 
+Basic components for CoSTAR system task execution such as \texttt{Perception},\texttt{Gripper},\texttt{Arm} and \texttt{Predicator} are united by behavior-tree based component \texttt{Instructor}. Symbols and predicates produced by components such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} are aggregated by \texttt{Predicator} which controls the task workflow of the behavior tree. 
 
 Behavior tree is expressive to represent a great variety of tasks accommodating different scenarios for human-robot collaborative surgery. This is achieved through the linking of internal nodes:
  
@@ -87,13 +87,28 @@ Combining the above structural nodes and operation nodes (usually leaf node), a 
 \end{figure}
 
 
-
-
 \section{Case Study}
+A simple surgical scenario where the framework will be helpful and easy to use is \textit{debridement}, which involves removing the dead tissue fragments during surgical treatment. We set up the experiment as in Fig. \ref{fig:dvrk} and Fig. \ref{fig:debridement}. 
 
+The target in this experiment is to transfer the pile of debridements  on the left to the tray on the right. Because it is safer to set motion scale at a low level during teleoperated robotic surgery, workspace of dVRK Patient Side Manipulater (PSM) is limited and requires frequent clutching of Master Tool Manipulator (MTM) to reorient the slave workspace. Therefore, we propose a two-step procedure: first use PSM1 (left) to manually pick one debris to a fixed position, then let PSM2 (right) to automatically pick up the debris and place it in the tray. The second step can be achieved through learn-from-demonstration (LfD) scheme: first surgeon demonstrate the pick-and-place procedure while recording some waypoints during manipulation. The saved waypoints can be used to automate the robot during second step. 
+
+The above procedure can be represented by a behavior tree as shown in Fig. \ref{fig:instructor}. The execution order for our user interface is from left to right and from top to bottom. Starting from the \texttt{ROOT} node, a \texttt{REPEAT} node is set to repeat the action which represented by a \texttt{SEQUENCE} node. The \texttt{PREDICATOR} node for pedal press signal is set after \texttt{WAITFORSUCCESS} node, so that the workflow proceeds whenever pedal is pressed. Finally, operation nodes such as \texttt{OPENGRIPPER} and \texttt{MOVETOWAYPOINTS} are added to complete the procedure. 
+
+By automating the PSM2 pick-and-place, surgeon can focus on using PSM1 to place the debris at the fixed location under safer motion scale. Whenever triggered by pedal press signal, PSM2 will repeat the action so that two arms can be operated at the same time, thus also largely increasing the speed.  
+
+
+\begin{figure}[bt]
+\centering
+\includegraphics[width=200pt]{debridement.png}
+\caption{Debridement experiment setup (a placeholder).}
+\label{fig:debridement}
+\end{figure}
 
 
 \section{Discussion and Conclusion}
+The modular framework and abstract representation of workflow make the proposed system ideal as a platform for conducting collaborative surgical robot research. Emerging topics such as machine learning based action detection or vision based surgical robot automation can be easily incorporated in this framework as a component. 
+
+For the proposed system itself, it allows surgeons to easily author task plans for various scenarios with appropriate level of automation. This will be of great benefit when multiple robot arms are present (such as full da Vinci Surgical system) or in HALS procedure \cite{bauzano2016collaborative} where surgeon only has one free hand to operate multiple tools. 
 
 \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
