@@ -19,13 +19,11 @@
 CoSTAR in Surgery: A Cross-platform User Interface \\for Surgical Robot Task Specification
 }
 %
-\author{Baichuan Jiang$^{1}$ and Chris Paxton$^{2}$
-\thanks{$^{1}$H. Kwakernaak is with Faculty of Electrical Engineering, Mathematics and Computer Science,
-        University of Twente, 7500 AE Enschede, The Netherlands
-        {\tt\small h.kwakernaak at papercept.net}}
-\thanks{$^{2}$P. Misra is with the Department of Electrical Engineering, Wright State University,
-        Dayton, OH 45435, USA
-        {\tt\small p.misra at ieee.org}}%
+\author{Baichuan Jiang, Chris Paxton, Peter Kazanzides, and Gregory D. Hager
+%\thanks{$^{1}$B. Jiang is with Laboratory for Computational Sensing and Robotics, Johns Hopkins University, Baltimore, MD 21218, USA
+%        {\tt\small baichuan@jhu.edu}}
+\thanks{Authors are with the Department of Computer Science, Johns Hopkins University,
+        Baltimore, MD 21218, USA}
 }
 
 \begin{document}
@@ -48,9 +46,11 @@ Human-Robot Collaboration (HRC) in surgery have been an emerging field of study 
 
 Surgical robots have been increasingly adopted in clinical procedures to support surgeons with various tasks, while most systems currently available are under full control of the surgeon. It is suggested in recent studies \cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi} that incorporating further intelligence into the surgical robot will free surgeons from repetitive tasks, reduce large movements of master manipulator to avoid clutching and readjusting hand position, and achieve better overall precision and accuracy. 
 
-For many of the proposed collaborative schemes, the central idea is to take advantage of the reliability in robots to perform less critical tasks while also allowing surgeons in the loop to perform fine actions with their domain knowledge. Hubot system in \cite{berthet2016hubot} runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, fully automated. Padoy et al. \cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure. To automatically alternate between manual and automated subtasks, observations of surgeon’s movement is served as a trigger for next automated subtask. Collaboration system for HALS procedure \cite{bauzano2016collaborative} where surgeon inserts a hand into abdomen while operating the laparoscopic instrument using the other hand also utilizes a workflow manager to allow the robot being informed of the current state of intervention. Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. Surgeons/researchers can easily construct such  behavior trees to automate the procedure adapting to their specific scenarios. 
+For many of the proposed collaborative schemes, the central idea is to take advantage of the reliability in robots to perform less critical tasks while also allowing surgeons in the loop to perform fine actions with their domain knowledge. Padoy et al. \cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure. To automatically alternate between manual and automated subtasks, observations of surgeon’s movement is served as a trigger for next automated subtask. Hubot system in \cite{berthet2016hubot} runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, fully automated. This kind of "human decide, robot do" scheme is also seen in semi-autonomous brain tumor ablation \cite{hu2015semi}.  Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. Surgeons/researchers can easily construct such  behavior trees to automate the procedure adapting to their specific scenarios. 
 
-This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. Therefore, while UR5 and KUKA LBR iiwa are also major platforms for collaborative surgical robot research, the focus of this work is on the new implementation on dVRK with syste setup shown in Fig. \ref{fig:dvrk}. 
+%Collaboration system for HALS procedure \cite{bauzano2016collaborative} where surgeon inserts a hand into abdomen while operating the laparoscopic instrument using the other hand also utilizes a workflow manager to allow the robot being informed of the current state of intervention.
+
+This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. Therefore, while UR5 and KUKA LBR iiwa are also major platforms for collaborative surgical robot research, the focus of this work is on the new implementation on dVRK with system setup shown in Fig. \ref{fig:dvrk}. 
 
 
 \begin{figure}[bt]
@@ -62,7 +62,7 @@ This work is a surgical generalization of our previous work in \cite{paxton2017c
 
 
 \section{System Architecture}
-To enable cross-platform implementation, a modular framework is designed. Taking the component \texttt{ARM} as an example, the inheritance within each component is the key part of the modularity. The abstract component \texttt{ARM} provides a list of functionalities, while all undefined but required functionalities such as \texttt{TEACH} and \texttt{MOVE} must be implemented by a particular instantiation of \texttt{ARM}, resulting in components \texttt{UR}, \texttt{IIWA}, and \texttt{PSM}. 
+To enable cross-platform implementation, a modular framework is designed. Taking the component \texttt{ARM} as an example, the inheritance within each component is the key part of the modularity. The abstract component \texttt{ARM} provides a list of functionalities, and all undefined but required functionalities such as \texttt{TEACH} and \texttt{MOVE} must be implemented by a particular instantiation of \texttt{ARM}, resulting in components \texttt{UR}, \texttt{IIWA}, and \texttt{PSM}. 
 
 Each component $C$ can be viewed as a set $(I,O,p,s,u)$ that associates with input data $I$, output data $O$, set of predicates $p$, set of symbols $s$ and set of operations $u$. Input and output are represented by ROS topics. Symbols represent object and positions, such as xxx, and predicates describe the qualities of these objects and positions, which can be used as start/stop conditions to control task workflow. More details of the component definition can be found in \cite{paxton2017costar}.
 
