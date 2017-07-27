@@ -62,11 +62,26 @@ This work is a surgical generalization of our previous work in \cite{paxton2017c
 
 
 \section{System Architecture}
-To enable cross-platform implementation, a modular framework is designed. Taking the component \texttt{ARM} as an example, the inheritance within each component is the key part of the modularity. The abstract component \texttt{ARM} provides a list of functionalities, and all undefined but required functionalities such as \texttt{TEACH} and \texttt{MOVE} must be implemented by a particular instantiation of \texttt{ARM}, resulting in components \texttt{UR}, \texttt{IIWA}, and \texttt{PSM}. 
+\subsection{Component based framework}
+Modular framework is one key for CoSTAR cross-platform implementation and it is achieved through the concept of \textit{Components}. Each component $C$ is associated with a set $(I,O,s,p,u)$: 
 
-Each component $C$ can be viewed as a set $(I,O,p,s,u)$ that associates with input data $I$, output data $O$, set of predicates $p$, set of symbols $s$ and set of operations $u$. Input and output are represented by ROS topics. Symbols represent abstract objects like \texttt{LEFT OF} (vision) or \texttt{PRESSED} (button), and predicates describe the qualities of these objects, which map symbols to a Boolean and can be used as start/stop conditions to control task workflow. More details of the component definition can be found in \cite{paxton2017costar}.
+\begin{itemize}
+\item \textit{Input $I$ and Output $O$} are represented by ROS topics and they are never explicitly exposed to end-user. 
+\item \textit{Symbols $s$} are populated from input as a function of the raw state of the world, which represent objects and positions, such as \texttt{LEFT OF} or \texttt{PRESSED}.
+\item \textit{Predicates $p$} describe the quality of existing symbols or their relationship, which is more formally expressed as a function mapping $p(I,s_0, ..., s_n) \rightarrow [\texttt{TRUE}, \texttt{FALSE}]$ that can be used to control workflow. 
+\item \textit{Operations $u$} are the specific actions that would change value of stored symbols or the state of robot. 
 
-Basic components for CoSTAR system task execution such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} and \texttt{Predicator} are united by behavior-tree based component \texttt{Instructor}. Symbols and predicates produced by components such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} are aggregated by \texttt{Predicator} which controls the task workflow of the behavior tree. 
+\end{itemize}
+
+Another key for modularity is the inheritance within each component. For an example, components \texttt{UR}, \texttt{IIWA}, and \texttt{PSM} are instantiations spawned from the abstract component \texttt{ARM} by implementing the required functionalities such as \texttt{TEACH} and \texttt{MOVE}. More detailed description of components can be found in \cite{paxton2017costar}.
+
+\subsection{Behavior tree instructor interface}
+
+%To enable cross-platform implementation, a modular framework is designed. Taking the component \texttt{ARM} as an example, the inheritance within each component is the key part of the modularity. The abstract component \texttt{ARM} provides a list of functionalities, and all undefined but required functionalities such as \texttt{TEACH} and \texttt{MOVE} must be implemented by a particular instantiation of \texttt{ARM}, resulting in components \texttt{UR}, \texttt{IIWA}, and \texttt{PSM}. 
+%
+%Each component $C$ can be viewed as a set $(I,O,p,s,u)$ that associates with input data $I$, output data $O$, set of predicates $p$, set of symbols $s$ and set of operations $u$. Input and output are represented by ROS topics. Symbols represent abstract objects like \texttt{LEFT OF} (vision) or \texttt{PRESSED} (button), and predicates describe the qualities of these objects, which map symbols to a Boolean and can be used as start/stop conditions to control task workflow. More details of the component definition can be found in \cite{paxton2017costar}.
+%
+%Basic components for CoSTAR system task execution such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} and \texttt{Predicator} are united by behavior-tree based component \texttt{Instructor}. Symbols and predicates produced by components such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} are aggregated by \texttt{Predicator} which controls the task workflow of the behavior tree. 
 
 Behavior tree is expressive to represent a great variety of tasks accommodating different scenarios for human-robot collaborative surgery. This is achieved through the linking of internal nodes:
  
