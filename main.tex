@@ -33,10 +33,13 @@ CoSTAR in Surgery: A Cross-platform User Interface \\for Surgical Robot Task Spe
 \pagestyle{empty}
 
 
+\newcommand{\fix}[1]{{\color{red} \textbf{[FIX: #1]}}}
+\newcommand{\todo}[2]{{\color{blue} \textbf{[TODO(#1): #2]}}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-Human-Robot Collaboration (HRC) in surgery has been an emerging field of study in recent years, which aims at incorporating both surgeon and machine's advantages to improve safety, accuracy and speed. In this work, we propose a cross-platform, open-source framework that would facilitate the surgical HRC research. The work is based on CoSTAR, which originally aims at allowing small manufacturers to easily specify complex tasks for robots accommodating different task scenarios. To demonstrate its feasibility as a platform for collaborative surgical robot research, we generalized the original system and implemented it on da Vinci Research Kit (dVRK), while maintains its full functionality on other robot platforms such as UR5 and KUKA LBR iiwa.  
+Human-Robot Collaboration (HRC) in surgery has been an emerging field of study in recent years, which aims at incorporating both surgeon and machine's advantages to improve safety, accuracy and speed. In this work, we propose a cross-platform, open-source framework that would facilitate the surgical HRC research. The work is based on CoSTAR, a Behavior-Tree based framework for end-user instruction of industrial robots~\cite{paxton2017costar}. To demonstrate its feasibility as a platform for collaborative surgical robot research, we generalized the original system and implemented it on da Vinci Research Kit (dVRK), while maintains its full functionality on other robot platforms such as UR5 and KUKA LBR iiwa.  
 
 \end{abstract}
 
@@ -50,7 +53,7 @@ For many of the proposed collaborative schemes, the central idea is to take adva
 
 %Collaboration system for HALS procedure \cite{bauzano2016collaborative} where surgeon inserts a hand into abdomen while operating the laparoscopic instrument using the other hand also utilizes a workflow manager to allow the robot being informed of the current state of intervention.
 
-This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. Therefore, while UR5 and KUKA LBR iiwa are also major platforms for collaborative surgical robot research, the focus of this work is on the new implementation on dVRK with system setup shown in Fig. \ref{fig:dvrk}. 
+This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. CoSTAR's core features are a modular architcture that lets us combine planning, perception, and logic with a BT-based task specification UI, previously shown on the KUKA LBR iiwa and the Universal Robots UR5. The focus of this work is on the new implementation on dVRK with system setup shown in Fig. \ref{fig:dvrk}. 
 
 
 \begin{figure}[bt]
@@ -62,8 +65,8 @@ This work is a surgical generalization of our previous work in \cite{paxton2017c
 
 
 \section{System Architecture}
-\subsection{Component based framework}
-Modular framework is one key for CoSTAR cross-platform implementation and it is achieved through the concept of \textit{Components}. Each component $C$ is associated with a set $(I,O,s,p,u)$: 
+%\subsection{Component based framework}
+CoSTAR is composed of a set of modular \textit{Components}. Each component $C$ is associated with a set $(I,O,s,p,u)$: 
 
 \begin{itemize}
 \item \textit{Input $I$ and Output $O$} are represented by ROS topics and they are never explicitly exposed to end-user. 
@@ -92,7 +95,7 @@ Behavior tree is expressive to represent a great variety of tasks accommodating 
 \item \texttt{RESET N} node: returns the value of child, but resets the child up to N times.
 \end{itemize} 
 
-Combining the above structural nodes and operation nodes (usually leaf node), a customized behavior tree can be created. The process of creation can be greatly simplified using the \texttt{INSTRUCTOR} user interface as shown in Fig. \ref{fig:instructor}.
+We can combine these structural and operation nodes to create a behavior tree that encapsulates very complex behavior. The process of creation can be greatly simplified using the \texttt{INSTRUCTOR} user interface as shown in Fig. \ref{fig:instructor}.
 
 \begin{figure}[bt]
 \centering
