@@ -49,17 +49,21 @@ Human-Robot Collaboration (HRC) in surgery has been an emerging field of study i
 
 Surgical robots have been increasingly adopted in clinical procedures to support surgeons with various tasks, while most systems currently available are under full control of the surgeon. It is suggested in recent studies \cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi} that incorporating further intelligence into the surgical robot will free surgeons from repetitive tasks, reduce large movements of master manipulator to avoid frequent clutching and readjusting hand position, and achieve better overall precision and accuracy. 
 
-For many of the proposed collaborative schemes, the central idea is to take advantage of the reliability in robots to perform less critical tasks while also allowing surgeons in the loop to perform fine actions with their domain knowledge. Padoy \textit{et al.} \cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure. To automatically alternate between manual and automated subtasks, observations of surgeon’s movement is served as a trigger for next automated subtask. Hubot system in \cite{berthet2016hubot} runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, fully automated. This kind of "human decide, robot do" scheme is also seen in semi-autonomous brain tumor ablation \cite{hu2015semi}.  Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. Surgeons/researchers can easily construct such  behavior trees to automate the procedure adapting to their specific scenarios. 
+Many proposed collaborative schemes aim to take advantage of the reliability in robots offer when performing less critical tasks, while taking advantage of surgeons' domain knowledge to to perform fine manipulation actions. Padoy \textit{et al.}~\cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure. To automatically alternate between manual and automated subtasks, observations of surgeon’s movement is served as a trigger for next automated subtask. Hubot~\cite{berthet2016hubot} proposed a system runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, and fully automated. This kind of ``human decide, robot do'' scheme was also used in semi-autonomous brain tumor ablation \cite{hu2015semi}.
+
+%Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. The user can easily construct a Behavior Tree to automate parts of the procedure to adapt it to their specific scenarios. 
 
 %Collaboration system for HALS procedure \cite{bauzano2016collaborative} where surgeon inserts a hand into abdomen while operating the laparoscopic instrument using the other hand also utilizes a workflow manager to allow the robot being informed of the current state of intervention.
 
-This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa. CoSTAR's core features are a modular architcture that lets us combine planning, perception, and logic with a BT-based task specification UI, previously shown on the KUKA LBR iiwa and the Universal Robots UR5. The focus of this work is on the new implementation on dVRK with system setup shown in Fig. \ref{fig:dvrk}. 
-
+Systems such as CoSTAR~\cite{paxton2017costar} aim to do something similar for collaborative robots in a variety of settings. 
+%This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa.
+CoSTAR's core features are a modular architcture that lets us combine planning, perception, and logic with a BT-based task specification UI, previously shown on the KUKA LBR iiwa and the Universal Robots UR5. Here, we propose to adapt and expand the system to make it suitable for surgical robotics, where an expert user can construct a Behavior Tree to automate parts of the procedure and adapt it to their specific scenarios.
+The system setup is shown in Fig.~\ref{fig:dvrk}. 
 
 \begin{figure}[bt]
 \centering
 \includegraphics[width=240pt]{dvrk.png}
-\caption{CoSTAR implementation on dVRK. User will first use desktop on the left to specify tasks, and then use the master console on the right alone to do the work.}
+\caption{CoSTAR implementation on dVRK. Users design the task plan using the user interface on the screen to the left, and then use the master console on the right to perform manual portions of the procedure.}
 \label{fig:dvrk}
 \end{figure}
 
