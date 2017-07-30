@@ -116,7 +116,7 @@ The target in this experiment is to transfer the pile of debridements  on the le
 
 The above procedure can be represented by a behavior tree as shown in Fig. \ref{fig:instructor}. The execution order for our user interface is from left to right and from top to bottom. Following the \texttt{ROOT} node, a \texttt{REPEAT} node is set to repeat the per-fragment action. Then a \texttt{SELECTION} node and a \texttt{SEQUENCE} node follows. The \texttt{PREDICATOR} node for pedal press signal is set after \texttt{WAITFORSUCCESS} node, so that the workflow proceeds whenever pedal is pressed. Finally, operation nodes such as \texttt{OPENGRIPPER} and \texttt{MOVETOWAYPOINTS} are added to complete the procedure. 
 
-By automating the PSM2 pick-and-place, surgeon can focus on using PSM1 to place the debris at the fixed location under safer motion scale. Whenever triggered by pedal press, PSM2 will repeat the action so that two arms can be operated at the same time, thus also greatly increasing the speed.  
+By automating the PSM2 pick-and-place, surgeon can focus on using PSM1 to place the debris at the fixed location under safer motion scale. Whenever triggered by pedal press, PSM2 will repeat the action so that two arms can be operated at the same time, thus greatly increasing the speed.  
 
 
 \begin{figure}[bt]
