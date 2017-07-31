@@ -24,6 +24,7 @@ CoSTAR in Surgery: A Cross-platform User Interface \\for Surgical Robot Task Spe
 %        {\tt\small baichuan@jhu.edu}}
 \thanks{Authors are with the Department of Computer Science, Johns Hopkins University,
         Baltimore, MD 21218, USA}
+%\thanks{Video demonstration can be found at https://youtu.be/RqQNLZuuRUE}
 }
 
 \begin{document}
@@ -49,7 +50,7 @@ Human-Robot Collaboration (HRC) in surgery has been an emerging field of study i
 
 Surgical robots have been increasingly adopted in clinical procedures to support surgeons with various tasks, while most systems currently available are under full control of the surgeon. It is suggested in recent studies \cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi} that incorporating further intelligence into the surgical robot will free surgeons from repetitive tasks, reduce large movements of master manipulator to avoid frequent clutching and readjusting hand position, and achieve better overall precision and accuracy. 
 
-Many proposed collaborative schemes aim to take advantage of the reliability in robots offer when performing less critical tasks, while taking advantage of surgeons' domain knowledge to to perform fine manipulation actions. Padoy \textit{et al.}~\cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure in order to automatically alternate between manual and automated subtasks. Hubot~\cite{berthet2016hubot} proposed a system runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, and fully automated. This kind of ``human decide, robot do'' scheme was also used in semi-autonomous brain tumor ablation \cite{hu2015semi}.
+Many proposed collaborative schemes aim to take advantage of the reliability that robots offer when performing less critical tasks, while taking advantage of surgeons' domain knowledge to perform fine manipulation actions. Padoy \textit{et al.}~\cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure in order to automatically alternate between manual and automated subtasks. Hubot~\cite{berthet2016hubot} proposed a system runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, and fully automated. This kind of ``human decide, robot do'' scheme was also used in semi-autonomous brain tumor ablation \cite{hu2015semi}.
 
 %Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. The user can easily construct a Behavior Tree to automate parts of the procedure to adapt it to their specific scenarios. 
 
@@ -57,7 +58,7 @@ Many proposed collaborative schemes aim to take advantage of the reliability in 
 
 Systems such as CoSTAR~\cite{paxton2017costar} aim to do something similar for collaborative robots in a variety of settings. 
 %This work is a surgical generalization of our previous work in \cite{paxton2017costar}, where the aim is to provide an easy way of authoring task plans for industrial robots such as UR5 and KUKA LBR iiwa.
-CoSTAR's core features are a modular architecture that combines planning, perception, and logic via a BT-based task specification UI, previously shown on the KUKA LBR iiwa and the Universal Robots UR5. Here, we propose to adapt and expand the system to make it suitable for surgical robotics, where an expert user can construct a Behavior Tree to automate parts of the procedure and adapt it to their specific scenarios.
+CoSTAR's core features are a modular architecture that combines planning, perception, and logic via a Behavior Tree-based task specification UI, previously shown on the KUKA LBR iiwa and the Universal Robots UR5. Here, we propose to adapt and expand the system to make it suitable for surgical robotics, where an expert user can construct a Behavior Tree to automate parts of the procedure and adapt it to their specific scenarios.
 The system setup is shown in Fig.~\ref{fig:dvrk}. 
 
 \begin{figure}[bt]
@@ -70,7 +71,7 @@ The system setup is shown in Fig.~\ref{fig:dvrk}.
 
 \section{System Architecture}
 %\subsection{Component based framework}
-CoSTAR is composed of a set of modular \textit{Components}, such as \texttt{GRIPPER} and \texttt{ARM}. This modular framework is one key for cross-platform implementation. Each component $C$ is associated with a set $(I,O,s,p,u)$: 
+A modular framework is one key for cross-platform implementation. CoSTAR is composed of a set of modular \textit{Components}, such as \texttt{GRIPPER} and \texttt{ARM}. Each component $C$ is associated with a set $(I,O,s,p,u)$: 
 
 \begin{itemize}
 \item \textit{Input $I$ and Output $O$} are represented by ROS topics and they are never explicitly exposed to end-user. 
@@ -103,14 +104,14 @@ We can combine these structural and operation nodes to create a behavior tree th
 
 \begin{figure}[bt]
 \centering
-\includegraphics[width=240pt]{instructor.png}
+\includegraphics[width=240pt]{instructor2.png}
 \caption{CoSTAR \texttt{INSTRUCTOR} user interface: tabs on the right have different functionalities to build a behavior tree and are able to do subtree manipulation. }
 \label{fig:instructor}
 \end{figure}
 
 
 \section{Case Study}
-A simple surgical scenario where the framework will be helpful and easy to use is \textit{debridement}, which involves removing the dead tissue fragments during surgical treatment. We set up the experiment as in Fig. \ref{fig:dvrk} and Fig. \ref{fig:debridement}. 
+A simple surgical scenario where the framework will be helpful and easy to use is \textit{debridement}, which involves removing the dead tissue fragments during surgical treatment. We set up the experiment \cite{video} as in Fig. \ref{fig:dvrk} and Fig. \ref{fig:debridement}. 
 
 The target in this experiment is to transfer the pile of debridements  on the left to the tray on the right. Because it is safer to set motion scale at a low level during teleoperated robotic surgery, workspace of dVRK Patient Side Manipulater (PSM) is limited and requires frequent clutching of Master Tool Manipulator (MTM) to reorient the slave workspace. Therefore, we propose a two-step procedure: first use PSM1 (left) to manually pick one fragment to a fixed position, then let PSM2 (right) to automatically pick it up and place it in the tray. The second step can be achieved through learn-from-demonstration (LfD) scheme: first surgeon demonstrate the pick-and-place procedure while recording waypoints during manipulation. The saved waypoints that follow a safe path can be used to automate the robot during the second step. 
 
