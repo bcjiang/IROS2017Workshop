@@ -40,7 +40,7 @@ CoSTAR in Surgery: A Cross-platform User Interface \\for Surgical Robot Task Spe
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-Human-Robot Collaboration (HRC) in surgery has been an emerging field of study in recent years, which aims at incorporating both surgeon and machine's advantages to improve safety, accuracy and speed. In this work, we propose a cross-platform, open-source framework that would facilitate the surgical HRC research. The work is based on CoSTAR, a Behavior-Tree based framework for end-user instruction of industrial robots~\cite{paxton2017costar}. To demonstrate its feasibility as a platform for collaborative surgical robot research, we generalized the original system and implemented it on da Vinci Research Kit (dVRK), while maintaining its full functionality on other robot platforms such as UR5 and KUKA LBR iiwa.  
+Human-Robot Collaboration (HRC) in surgery has been an emerging field of study in recent years, which aims at incorporating the advantages of both surgeon and machine to improve safety, accuracy and speed. In this work, we propose a cross-platform, open-source framework that would facilitate surgical HRC research. The work is based on CoSTAR, a Behavior-Tree based framework for end-user instruction of industrial robots~\cite{paxton2017costar}. To demonstrate its feasibility as a platform for collaborative surgical robot research, we generalized the original system and implemented it on the da Vinci Research Kit (dVRK), while maintaining its full functionality on other robot platforms such as UR5 and KUKA LBR iiwa.  
 
 \end{abstract}
 
@@ -48,9 +48,9 @@ Human-Robot Collaboration (HRC) in surgery has been an emerging field of study i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-Surgical robots have been increasingly adopted in clinical procedures to support surgeons with various tasks, while most systems currently available are under full control of the surgeon. It is suggested in recent studies \cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi} that incorporating further intelligence into the surgical robot will free surgeons from repetitive tasks, reduce large movements of master manipulator to avoid frequent clutching and readjusting hand position, and achieve better overall precision and accuracy. 
+Surgical robots have been increasingly adopted in clinical procedures to support surgeons with various tasks, although most systems currently available are under full control of the surgeon. It is suggested in recent studies \cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi} that incorporating further intelligence into the surgical robot will free surgeons from repetitive tasks, reduce large movements of the master manipulator to avoid frequent clutching and readjusting hand position, and achieve better overall precision and accuracy. 
 
-Many proposed collaborative schemes aim to take advantage of the reliability that robots offer when performing less critical tasks, while taking advantage of surgeons' domain knowledge to perform fine manipulation actions. Padoy \textit{et al.}~\cite{padoy2011human} adopted Hidden Markov Model (HMM) as a way of modeling surgical procedure in order to automatically alternate between manual and automated subtasks. Hubot~\cite{berthet2016hubot} proposed a system runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, and fully automated. This kind of ``human decide, robot do'' scheme was also used in semi-autonomous brain tumor ablation \cite{hu2015semi}.
+Many proposed collaborative schemes aim to take advantage of the reliability that robots offer when performing less critical tasks, while taking advantage of the surgeons' domain knowledge to perform fine manipulation actions. Padoy \textit{et al.}~\cite{padoy2011human} adopted a Hidden Markov Model (HMM) as a way of modeling a surgical procedure in order to automatically alternate between manual and automated subtasks. Hubot~\cite{berthet2016hubot} proposed a system that runs continuously in a loop, alternating between three modes: fully manual, manual with haptic guidance, and fully automated. This kind of ``human decide, robot do'' scheme was also used in semi-autonomous brain tumor ablation \cite{hu2015semi}.
 
 %Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. The user can easily construct a Behavior Tree to automate parts of the procedure to adapt it to their specific scenarios. 
 
@@ -74,14 +74,14 @@ The system setup is shown in Fig.~\ref{fig:dvrk}.
 A modular framework is one key for cross-platform implementation. CoSTAR is composed of a set of modular \textit{Components}, such as \texttt{GRIPPER} and \texttt{ARM}. Each component $C$ is associated with a set $(I,O,s,p,u)$: 
 
 \begin{itemize}
-\item \textit{Input $I$ and Output $O$} are represented by ROS topics and they are never explicitly exposed to end-user. 
+\item \textit{Input $I$ and Output $O$} are represented by ROS topics and they are never explicitly exposed to the end-user. 
 \item \textit{Symbols $s$} are populated from input as a function of the raw state of the world, which represent objects and positions, such as \texttt{LEFT OF} or \texttt{PRESSED}.
 \item \textit{Predicates $p$} describe the quality of existing symbols or their relationship, which is more formally expressed as a function mapping $p(I,s_0, ..., s_n) \rightarrow [\texttt{TRUE}, \texttt{FALSE}]$ that can be used to control workflow. 
-\item \textit{Operations $u$} are the specific actions that would change value of stored symbols or the state of robot. 
+\item \textit{Operations $u$} are the specific actions that would change the value of stored symbols or the state of the robot. 
 
 \end{itemize}
 
-Another key for modularity is the inheritance within each component. For an example, components \texttt{PSM} and \texttt{DVRK\char`_GRIPPER} for the patient side manipulators are instantiations spawned from the abstract component \texttt{ARM} and \texttt{GRIPPER} by implementing the required functionalities such as \texttt{MOVE} and \texttt{CLOSE\char`_GRIPPER}. More detailed description of components can be found in \cite{paxton2017costar}.
+Another key for modularity is the inheritance within each component. For example, components \texttt{PSM} and \texttt{DVRK\char`_GRIPPER} for the patient side manipulators are instantiations spawned from the abstract component \texttt{ARM} and \texttt{GRIPPER} by implementing the required functionalities such as \texttt{MOVE} and \texttt{CLOSE\char`_GRIPPER}. More detailed description of components can be found in \cite{paxton2017costar}.
 
 \subsection{Behavior tree instructor interface}
 
@@ -91,10 +91,10 @@ Another key for modularity is the inheritance within each component. For an exam
 %
 %Basic components for CoSTAR system task execution such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} and \texttt{Predicator} are united by behavior-tree based component \texttt{Instructor}. Symbols and predicates produced by components such as \texttt{Perception}, \texttt{Gripper}, \texttt{Arm} are aggregated by \texttt{Predicator} which controls the task workflow of the behavior tree. 
 
-Behavior tree is expressive to represent a great variety of tasks accommodating different scenarios for human-robot collaborative surgery. This is achieved through the linking of internal nodes:
+A behavior tree is expressive to represent a great variety of tasks accommodating different scenarios for human-robot collaborative surgery. This is achieved through the linking of internal nodes:
  
 \begin{itemize}
-\item \texttt{SEQUENCE} node: tick each child at a time in order, until each one reports \texttt{SUCCESS}. One child's fail will result in sequence's fail.
+\item \texttt{SEQUENCE} node: tick each child in order, until each one reports \texttt{SUCCESS}. One child's fail will result in the sequence's fail.
 \item \texttt{SELECTION} node: tick each child in order until one returns success.
 \item \texttt{REPEAT N} node: tick children until N successes or failures are reported.
 \item \texttt{RESET N} node: returns the value of child, but resets the child up to N times.
@@ -113,17 +113,17 @@ We can combine these structural and operation nodes to create a behavior tree th
 \section{Case Study}
 A simple surgical scenario where the framework will be helpful and easy to use is \textit{debridement}, which involves removing the dead tissue fragments during surgical treatment. We set up the experiment \cite{video} as in Fig. \ref{fig:dvrk} and Fig. \ref{fig:debridement}. 
 
-The target in this experiment is to transfer the pile of debridements  on the left to the tray on the right. Because it is safer to set motion scale at a low level during teleoperated robotic surgery, workspace of dVRK Patient Side Manipulater (PSM) is limited and requires frequent clutching of Master Tool Manipulator (MTM) to reorient the slave workspace. Therefore, we propose a two-step procedure: first use PSM1 (left) to manually pick one fragment to a fixed position, then let PSM2 (right) to automatically pick it up and place it in the tray. The second step can be achieved through learn-from-demonstration (LfD) scheme: first surgeon demonstrate the pick-and-place procedure while recording waypoints during manipulation. The saved waypoints that follow a safe path can be used to automate the robot during the second step. 
+The target in this experiment is to transfer the pile of debridements  on the left to the tray on the right. Because it is safer to set the motion scale at a low level during teleoperated robotic surgery, the workspace of the dVRK Patient Side Manipulator (PSM) is limited and requires frequent clutching of the Master Tool Manipulator (MTM) to reorient the slave workspace. Therefore, we propose a two-step procedure: first use PSM1 (left) to manually pick one fragment to a fixed position, then let PSM2 (right) to automatically pick it up and place it in the tray. The second step can be achieved through a learn-from-demonstration (LfD) scheme: first the surgeon demonstrates the pick-and-place procedure while recording waypoints during manipulation. The saved waypoints that follow a safe path can be used to automate the robot during the second step. 
 
-The above procedure can be represented by a behavior tree as shown in Fig. \ref{fig:instructor}. The execution order for our user interface is from left to right and from top to bottom. Following the \texttt{ROOT} node, a \texttt{REPEAT} node is set to repeat the per-fragment action. Then a \texttt{SEQUENCE} node follows, representing the automation sequence. The \texttt{PREDICATOR} node for pedal press signal is set after \texttt{WAITFORSUCCESS} node, so that the workflow proceeds whenever pedal is pressed. Finally, operation nodes such as \texttt{OPENGRIPPER} and \texttt{MOVETOWAYPOINTS} are added to complete the procedure. 
+The above procedure can be represented by a behavior tree as shown in Fig. \ref{fig:instructor}. The execution order for our user interface is from left to right and from top to bottom. Following the \texttt{ROOT} node, a \texttt{REPEAT} node is set to repeat the per-fragment action. Then a \texttt{SEQUENCE} node follows, representing the automation sequence. The \texttt{PREDICATOR} node for pedal press signal is set after the \texttt{WAITFORSUCCESS} node, so that the workflow proceeds whenever the pedal is pressed. Finally, operation nodes such as \texttt{OPENGRIPPER} and \texttt{MOVETOWAYPOINTS} are added to complete the procedure. 
 
-By automating the PSM2 pick-and-place, surgeon can focus on using PSM1 to place the debris at the fixed location under safer motion scale. Whenever triggered by pedal press, PSM2 will repeat the action so that two arms can be operated at the same time, thus greatly increasing the speed.  
+By automating the PSM2 pick-and-place, the surgeon can focus on using PSM1 to place the debris at the fixed location under a safer motion scale. Whenever triggered by a pedal press, PSM2 will repeat the action so that two arms can be operated at the same time, thus greatly increasing the speed.  
 
 
 \begin{figure}[bt]
 \centering
 \includegraphics[width=195pt]{debridement.jpg}
-\caption{Debridement experiment setup. PSM1 will pick one debris from the left pile and place it on the red cross, then PSM2 will pick the piece from red cross and trasport it to the tray.}
+\caption{Debridement experiment setup. PSM1 will pick one debris from the left pile and place it on the red cross, then PSM2 will pick the piece from the red cross and transport it to the tray.}
 \label{fig:debridement}
 \end{figure}
 
@@ -131,7 +131,7 @@ By automating the PSM2 pick-and-place, surgeon can focus on using PSM1 to place 
 \section{Conclusion}
 The modular framework and abstract representation of workflow make the proposed system ideal as a platform for conducting collaborative surgical robot research. Emerging topics such as machine learning based action detection or vision based surgical robot automation can be easily incorporated in this framework as a component. 
 
-For the proposed system itself, it allows surgeons to easily author task plans for various scenarios with appropriate level of automation. This will be of great benefit when multiple robot arms are present (such as full da Vinci Surgical system) or in HALS procedure \cite{bauzano2016collaborative} where surgeon only has one free hand to operate multiple tools. 
+For the proposed system itself, it allows surgeons to easily author task plans for various scenarios with an appropriate level of automation. This will be of great benefit when multiple robot arms are present (such as a full da Vinci Surgical System) or in a Hand-Assisted Laparoscopic Surgery (HALS) procedure \cite{bauzano2016collaborative} where the surgeon only has one free hand to operate multiple tools. 
 
 \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
