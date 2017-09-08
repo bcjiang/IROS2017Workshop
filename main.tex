@@ -48,9 +48,16 @@ Human-Robot Collaboration (HRC) in surgery has been an emerging field of study i
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-Surgical robots have been increasingly adopted in clinical procedures to support surgeons with various tasks, although most systems currently available are under full control of the surgeon. It is suggested in recent studies \cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi} that incorporating further intelligence into the surgical robot will free surgeons from repetitive tasks, reduce large movements of the master manipulator to avoid frequent clutching and readjusting hand position, and achieve better overall precision and accuracy. 
+Surgical robots have been increasingly adopted in clinical procedures to
+support surgeons with various tasks, although most currently available systems
+are under full control of the surgeon. Recent studies have suggested that
+incorporating further intelligence into the surgical robot will free surgeons
+from repetitive tasks, reduce large movements of the master manipulator to
+avoid frequent clutching and readjusting hand position, and achieve better
+overall precision and accuracy,
+e.g.~\cite{padoy2011human,berthet2016hubot,bauzano2016collaborative,hu2015semi}.
 
-Many proposed collaborative schemes aim to take advantage of the reliability that robots offer when performing less critical tasks, while taking advantage of the surgeons' domain knowledge to perform fine manipulation actions. Padoy \textit{et al.}~\cite{padoy2011human} adopted a Hidden Markov Model (HMM) as a way of modeling a surgical procedure in order to automatically alternate between manual and automated subtasks. The Hubot~\cite{berthet2016hubot} system runs continuously in a loop alternating between fully manual, manual with haptic guidance, and fully automated modes. This kind of ``human decide, robot do'' scheme was also used in semi-autonomous brain tumor ablation \cite{hu2015semi}.
+Many of these proposed collaborative schemes aim to take advantage of the reliability that robots offer when performing less critical tasks, while taking advantage of the surgeons' domain knowledge to perform fine manipulation actions. Padoy \textit{et al.}~\cite{padoy2011human} adopted a Hidden Markov Model (HMM) as a way of modeling a surgical procedure in order to automatically alternate between manual and automated subtasks. The Hubot~\cite{berthet2016hubot} system runs continuously in a loop alternating between fully manual, manual with haptic guidance, and fully automated modes. This kind of ``human decide, robot do'' scheme was also used in semi-autonomous brain tumor ablation \cite{hu2015semi}.
 
 %Therefore, we propose a common task specification framework where tasks can be represented by nodes of behavior tree, corresponding to different phases in these collaborative schemes. The user can easily construct a Behavior Tree to automate parts of the procedure to adapt it to their specific scenarios. 
 
@@ -129,10 +136,19 @@ By automating the PSM2 pick-and-place, the surgeon can focus on using PSM1 to pl
 
 
 \section{Conclusion}
-The modular framework and abstract representation of workflow and environment state (by predicates and symbols) make the proposed system an ideal surgical HRC platform. Emerging topics such as machine learning based action detection or vision based surgical robot automation can be easily incorporated in this framework as a component. 
 
-For the proposed system itself, it allows surgeons to easily author task plans for various scenarios with an appropriate level of automation. This will be of great benefit when multiple robot arms are present (such as a full da Vinci Surgical System) or in a Hand-Assisted Laparoscopic Surgery (HALS) procedure \cite{bauzano2016collaborative} where the surgeon only has one free hand to operate multiple tools. 
+We described a modified version of the open-source CoSTAR system that allows surgeons to
+quickly author partially autonomous task plans for the DVRK.
+This will be of
+great benefit when multiple robot arms are present, such as a full da Vinci
+Surgical System, or in a Hand-Assisted Laparoscopic Surgery (HALS)
+procedure~\cite{bauzano2016collaborative} where the surgeon only has one free
+hand to operate multiple tools..
 
+The modular framework and abstract representation of workflow and environment
+state (by predicates and symbols) make the proposed system an ideal surgical
+HRC platform. In the future we will incorporate machine learning-based action
+detection or vision based surgical robot automation and perception.
 
 \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
                                   % on the last page of the document manually. It shortens
